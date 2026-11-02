@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Utama - PustakaKopi | UTS Pemrograman Web 1</title>
+  
+  <!-- CSS External Utama -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- CSS Internal: Variasi gaya visual khusus dashboard -->
+  <style>
+    .welcome-banner {
+      background: linear-gradient(135deg, #3d2417 0%, #6f472d 60%, #b87a4b 100%);
+      color: #fff;
+      border-radius: var(--radius-xl);
+      padding: 2.5rem 2rem;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 2.5rem;
+      box-shadow: 0 10px 25px -5px rgba(61, 36, 23, 0.25);
+    }
+    .welcome-banner::after {
+      content: "☕";
+      position: absolute;
+      right: 2rem;
+      bottom: -1rem;
+      font-size: 8rem;
+      opacity: 0.12;
+      pointer-events: none;
+    }
+    .nav-card-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+    .menu-action-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.25s ease;
+      position: relative;
+      cursor: pointer;
+    }
+    .menu-action-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--coffee-caramel);
+    }
+    .menu-action-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      background-color: var(--coffee-cream);
+      color: var(--coffee-espresso);
+    }
+    @media (max-width: 992px) {
+      .nav-card-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 600px) {
+      .nav-card-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="top-notice-bar">
+    ☕ Selamat Datang di Sistem Manajemen Toko Buku &amp; Kopi <strong>PustakaKopi</strong>
+  </div>
+
+  <!-- Main Navigation Bar -->
+  <header class="main-header">
+    <div class="container">
+      <nav class="navbar">
+        <a href="dashboard.html" class="brand-logo">
+          <div class="brand-icon">☕</div>
+          <span>Pustaka<span style="color: #8b5a36;">Kopi</span></span>
+        </a>
+
+        <!-- Mobile Toggle Button -->
+        <button id="navToggleBtn" class="nav-toggle-btn" aria-label="Menu Navigasi">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+
+        <!-- Menu Navigasi Utama -->
+        <ul id="mainNavMenu" class="nav-menu">
+          <li><a href="dashboard.html" class="nav-link active">Dashboard</a></li>
+          <li><a href="stok.html" class="nav-link">Katalog &amp; Stok</a></li>
+          <li><a href="checkout.html" class="nav-link">Pemesanan</a></li>
+          <li><a href="tracking.html" class="nav-link">Tracking DO</a></li>
+        </ul>
+
+        <!-- Profil & Aksi Logout -->
+        <div class="nav-actions">
+          <div class="user-badge">
+            <span class="user-badge-avatar">👤</span>
+            <span id="userNameDisplay">Admin</span>
+          </div>
+          <button onclick="logoutUser()" class="btn btn-outline btn-sm" title="Keluar">
+            Logout
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" style="padding-top: 2rem; padding-bottom: 3rem;">
+    
+    <!-- Welcome Greeting Banner (Sesuai Soal No. 2: Greeting Berdasarkan Local Time) -->
+    <section class="welcome-banner">
+      <div style="max-width: 650px; position: relative; z-index: 2;">
+        <span class="badge" style="background: rgba(255,255,255,0.2); color: #fff; margin-bottom: 0.75rem;">
+          🗓️ <span id="currentTimeDisplay">Waktu Lokal</span>
+        </span>
+        <h1 style="color: #ffffff; font-size: 2.2rem; margin-bottom: 0.5rem;" class="font-serif">
+          <span id="userGreeting">Selamat Datang</span>!
+        </h1>
+        <p style="color: #f5ebe1; font-size: 1.05rem; line-height: 1.6;">
+          Kelola stok buku pustaka, pantau proses pemesanan, dan lacak status pengiriman pelanggan secara mudah dalam satu dashboard terpadu.
+        </p>
+      </div>
+    </section>
+
+    <!-- Menu Utama Navigasi (Sesuai Soal No. 2: 4 Tombol Navigasi Wajib) -->
+    <section style="margin-bottom: 2rem;">
+      <h2 style="font-size: 1.35rem; color: #2a1810; margin-bottom: 1.25rem;">
+        Pusat Kendali Aplikasi
+      </h2>
+
+      <div class="nav-card-grid">
+        <!-- 1. Navigasi: Informasi Stok/Katalog -->
+        <a href="stok.html" class="menu-action-card">
+          <div class="menu-action-icon">📚</div>
+          <h3 style="font-size: 1.1rem; color: #2a1810; margin-bottom: 0.35rem;">Informasi Stok</h3>
+          <p style="font-size: 0.85rem; color: #6f472d; margin-bottom: 1rem;">
+            Kelola katalog buku, lihat ketersediaan stok, dan tambah data judul baru.
+          </p>
+          <span style="margin-top: auto; font-weight: 700; font-size: 0.85rem; color: #8b5a36;">
+            Buka Katalog &rarr;
+          </span>
+        </a>
+
+        <!-- 2. Navigasi: Tracking Pengiriman -->
+        <a href="tracking.html" class="menu-action-card">
+          <div class="menu-action-icon">🚚</div>
+          <h3 style="font-size: 1.1rem; color: #2a1810; margin-bottom: 0.35rem;">Tracking Pengiriman</h3>
+          <p style="font-size: 0.85rem; color: #6f472d; margin-bottom: 1rem;">
+            Lacak status ekspedisi paket pesanan berdasarkan nomor Delivery Order (DO).
+          </p>
+          <span style="margin-top: auto; font-weight: 700; font-size: 0.85rem; color: #8b5a36;">
+            Lacak Paket &rarr;
+          </span>
+        </a>
+
+        <!-- 3. Navigasi: Laporan Pemesanan -->
+        <div onclick="bukaModal('modalLaporanPemesanan')" class="menu-action-card">
+          <div class="menu-action-icon">📊</div>
+          <h3 style="font-size: 1.1rem; color: #2a1810; margin-bottom: 0.35rem;">Laporan Pemesanan</h3>
+          <p style="font-size: 0.85rem; color: #6f472d; margin-bottom: 1rem;">
+            Ringkasan data pemesanan buku pelanggan terbaru yang sedang diproses.
+          </p>
+          <span style="margin-top: auto; font-weight: 700; font-size: 0.85rem; color: #8b5a36;">
+            Lihat Laporan &rarr;
+          </span>
+        </div>
+
+        <!-- 4. Navigasi: History Transaksi -->
+        <div onclick="bukaModal('modalHistoryTransaksi')" class="menu-action-card">
+          <div class="menu-action-icon">📜</div>
+          <h3 style="font-size: 1.1rem; color: #2a1810; margin-bottom: 0.35rem;">History Transaksi</h3>
+          <p style="font-size: 0.85rem; color: #6f472d; margin-bottom: 1rem;">
+            Catatan riwayat transaksi penjualan buku dan verifikasi pembayaran.
+          </p>
+          <span style="margin-top: auto; font-weight: 700; font-size: 0.85rem; color: #8b5a36;">
+            Buka Riwayat &rarr;
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bagian Buku Terpopuler / Quick Order Preview -->
+    <section>
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.5rem;">
+        <div>
+          <span class="badge badge-coffee" style="margin-bottom: 0.4rem;">Pilihan Pembaca</span>
+          <h2 style="font-size: 1.5rem; color: #2a1810;">Koleksi Buku &amp; Kopi Favorit</h2>
+        </div>
+        <a href="stok.html" class="btn btn-outline btn-sm">Lihat Semua Buku &rarr;</a>
+      </div>
+
+      <div class="grid-3" id="dashboardBukuGrid">
+        <!-- Rendered Card Buku 1 -->
+        <div class="product-card">
+          <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500&auto=format&fit=crop&q=60" alt="Filosofi Kopi" class="product-card-img" onerror="this.onerror=null; this.src='img/buku1.svg';">
+          <div class="product-card-body">
+            <span class="product-card-category">Sastra &amp; Fiksi</span>
+            <h3 class="product-card-title">Filosofi Kopi &amp; Aroma Kehidupan</h3>
+            <p class="product-card-author">Dee Lestari &bull; Bentang Pustaka</p>
+            <div class="product-card-footer">
+              <span class="product-price">Rp 85.000</span>
+              <a href="checkout.html" class="btn btn-primary btn-sm">+ Pesan</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rendered Card Buku 2 -->
+        <div class="product-card">
+          <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=500&auto=format&fit=crop&q=60" alt="The World Atlas of Coffee" class="product-card-img" onerror="this.onerror=null; this.src='img/buku2.svg';">
+          <div class="product-card-body">
+            <span class="product-card-category">Kuliner &amp; Pengetahuan</span>
+            <h3 class="product-card-title">The World Atlas of Coffee</h3>
+            <p class="product-card-author">James Hoffmann &bull; Mitchell Beazley</p>
+            <div class="product-card-footer">
+              <span class="product-price">Rp 210.000</span>
+              <a href="checkout.html" class="btn btn-primary btn-sm">+ Pesan</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rendered Card Buku 3 -->
+        <div class="product-card">
+          <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=500&auto=format&fit=crop&q=60" alt="Clean Code" class="product-card-img" onerror="this.onerror=null; this.src='img/images.svg';">
+          <div class="product-card-body">
+            <span class="product-card-category">Teknologi &amp; IT</span>
+            <h3 class="product-card-title">Clean Code: Handbook of Agile</h3>
+            <p class="product-card-author">Robert C. Martin &bull; Prentice Hall</p>
+            <div class="product-card-footer">
+              <span class="product-price">Rp 175.000</span>
+              <a href="checkout.html" class="btn btn-primary btn-sm">+ Pesan</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================
+       MODAL BOX: LAPORAN PEMESANAN (Navigasi No. 3 Soal)
+       ======================================================== -->
+  <div id="modalLaporanPemesanan" class="modal-overlay">
+    <div class="modal-content" style="max-width: 650px;">
+      <div class="modal-header">
+        <h3 class="modal-title">📊 Laporan Pemesanan Terbaru</h3>
+        <button type="button" class="modal-close-btn" onclick="tutupModal('modalLaporanPemesanan')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.85rem; margin-bottom: 1rem; color: #6f472d;">
+          Berikut rangkuman daftar pesanan buku yang sedang diproses oleh tim gudang:
+        </p>
+        <div class="table-responsive">
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>No. DO</th>
+                <th>Pemesan</th>
+                <th>Paket</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight: 700; color: #6f472d;">DO-2026-001</td>
+                <td>Budi Santoso</td>
+                <td>Paket Buku Premium</td>
+                <td><span class="badge badge-warning">Dalam Perjalanan</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight: 700; color: #6f472d;">DO-2026-002</td>
+                <td>Siti Rahmawati</td>
+                <td>Paket Koleksi Sastra</td>
+                <td><span class="badge badge-info">Dikirim Kurir</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight: 700; color: #6f472d;">DO-2026-003</td>
+                <td>Ahmad Rizky Pratama</td>
+                <td>Paket Kilat Kopi &amp; Buku</td>
+                <td><span class="badge badge-success">Selesai</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="tutupModal('modalLaporanPemesanan')">Tutup</button>
+        <a href="tracking.html" class="btn btn-primary btn-sm">Buka Halaman Tracking &rarr;</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL BOX: HISTORY TRANSAKSI (Navigasi No. 4 Soal)
+       ======================================================== -->
+  <div id="modalHistoryTransaksi" class="modal-overlay">
+    <div class="modal-content" style="max-width: 700px;">
+      <div class="modal-header">
+        <h3 class="modal-title">📜 History Transaksi Pembayaran</h3>
+        <button type="button" class="modal-close-btn" onclick="tutupModal('modalHistoryTransaksi')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Tanggal</th>
+                <th>ID Transaksi</th>
+                <th>Metode Bayar</th>
+                <th>Total Bayar</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>01 Nov 2026</td>
+                <td style="font-weight: 700;">TRX-09823</td>
+                <td>Transfer BCA</td>
+                <td style="font-weight: 700;">Rp 195.000</td>
+                <td><span class="badge badge-success">Lunas</span></td>
+              </tr>
+              <tr>
+                <td>02 Nov 2026</td>
+                <td style="font-weight: 700;">TRX-09841</td>
+                <td>QRIS Mandiri</td>
+                <td style="font-weight: 700;">Rp 295.000</td>
+                <td><span class="badge badge-success">Lunas</span></td>
+              </tr>
+              <tr>
+                <td>02 Nov 2026</td>
+                <td style="font-weight: 700;">TRX-09855</td>
+                <td>GoPay / e-Wallet</td>
+                <td style="font-weight: 700;">Rp 125.000</td>
+                <td><span class="badge badge-success">Lunas</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="tutupModal('modalHistoryTransaksi')">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Footer -->
+  <footer class="main-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="brand-logo" style="color: #fff; margin-bottom: 0.75rem;">
+            <div class="brand-icon">☕</div>
+            <span>PustakaKopi</span>
+          </div>
+          <p style="color: #e8d8c8; font-size: 0.875rem;">
+            Aplikasi Pemesanan Toko Buku &amp; Kopi Modern. Proyek Ujian Tengah Semester (UTS) Pemrograman Web 1.
+          </p>
+        </div>
+        <div>
+          <h4 class="footer-title">Navigasi Cepat</h4>
+          <ul class="footer-links">
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="stok.html">Katalog Buku</a></li>
+            <li><a href="checkout.html">Keranjang Pesanan</a></li>
+            <li><a href="tracking.html">Tracking DO</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Kategori Buku</h4>
+          <ul class="footer-links">
+            <li><a href="stok.html">Sastra &amp; Fiksi</a></li>
+            <li><a href="stok.html">Kuliner &amp; Kopi</a></li>
+            <li><a href="stok.html">Teknologi &amp; IT</a></li>
+            <li><a href="stok.html">Pengembangan Diri</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Informasi Mahasiswa</h4>
+          <p style="color: #e8d8c8; font-size: 0.85rem; line-height: 1.6;">
+            <strong>Universitas Pelita Bangsa</strong><br>
+            Mata Kuliah: Pemrograman Web 1<br>
+            Tahun Ajaran 2026/2027
+          </p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 PustakaKopi Store. Dikerjakan untuk pemenuhan UTS Pemrograman Web 1.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

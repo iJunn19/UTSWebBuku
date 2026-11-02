@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Form Pemesanan &amp; Checkout - PustakaKopi | UTS Pemrograman Web 1
+    </title>
+
+    <!-- CSS External Utama -->
+    <link rel="stylesheet" href="css/style.css" />
+
+    <!-- CSS Internal: Styling khusus checkout & layout 2 kolom -->
+    <style>
+      .checkout-layout {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 2rem;
+        align-items: flex-start;
+      }
+      .order-summary-box {
+        background: #ffffff;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        box-shadow: var(--shadow-sm);
+      }
+      .cost-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.65rem;
+        font-size: 0.9rem;
+      }
+      .cost-total {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 2px dashed var(--border-color);
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: var(--coffee-dark);
+      }
+      @media (max-width: 900px) {
+        .checkout-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Top Announcement Bar
+  <div class="top-notice-bar">
+    ☕ <strong>Halaman Pemesanan</strong> &bull; Kelola item pesanan buku &amp; lengkapi identitas pemesan
+  </div> -->
+
+    <!-- Main Navigation Bar -->
+    <header class="main-header">
+      <div class="container">
+        <nav class="navbar">
+          <a href="dashboard.html" class="brand-logo">
+            <div class="brand-icon">☕</div>
+            <span>Pustaka<span style="color: #8b5a36">Kopi</span></span>
+          </a>
+
+          <!-- Mobile Toggle Button -->
+          <button
+            id="navToggleBtn"
+            class="nav-toggle-btn"
+            aria-label="Menu Navigasi"
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+
+          <ul id="mainNavMenu" class="nav-menu">
+            <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+            <li><a href="stok.html" class="nav-link">Katalog &amp; Stok</a></li>
+            <li>
+              <a href="checkout.html" class="nav-link active">Pemesanan</a>
+            </li>
+            <li><a href="tracking.html" class="nav-link">Tracking DO</a></li>
+          </ul>
+
+          <div class="nav-actions">
+            <div class="user-badge">
+              <span class="user-badge-avatar">👤</span>
+              <span id="userNameDisplay">Admin</span>
+            </div>
+            <button onclick="logoutUser()" class="btn btn-outline btn-sm">
+              Logout
+            </button>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Checkout Content -->
+    <main class="container" style="padding-top: 2rem; padding-bottom: 3.5rem">
+      <!-- Header Halaman -->
+      <div style="margin-bottom: 2rem">
+        <span class="badge badge-coffee" style="margin-bottom: 0.35rem"
+          >Transaksi Baru</span
+        >
+        <h1 style="font-size: 2rem; color: #2a1810" class="font-serif">
+          Form Pemesanan Buku
+        </h1>
+        <p style="font-size: 0.95rem; color: #6f472d">
+          Periksa daftar buku pesanan Anda, ubah jumlah jika diperlukan, dan
+          lengkapi data pengiriman.
+        </p>
+      </div>
+
+      <!-- Layout 2 Kolom Pemesanan -->
+      <div class="checkout-layout">
+        <!-- KOLOM KIRI: Data Pemesanan (Dapat Ditambah / Diubah sesuai Soal No. 4) -->
+        <div>
+          <div class="card" style="margin-bottom: 1.5rem">
+            <div class="card-header">
+              <h2 style="font-size: 1.2rem; color: #2a1810">
+                1. Rincian Item Buku Pesanan
+              </h2>
+              <a href="stok.html" class="btn btn-outline btn-sm"
+                >+ Tambah Buku Lain</a
+              >
+            </div>
+
+            <div class="table-responsive">
+              <table class="table-custom">
+                <thead>
+                  <tr>
+                    <th>Buku</th>
+                    <th>Harga</th>
+                    <th style="text-align: center">Jumlah</th>
+                    <th>Subtotal</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <!-- Diisi secara dinamis oleh JavaScript DOM -->
+                <tbody id="daftarItemCheckout">
+                  <!-- Data item pesanan dirender di script.js -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Ringkasan Kalkulasi Biaya -->
+            <div
+              style="
+                margin-top: 1.5rem;
+                padding: 1.25rem;
+                background-color: var(--bg-subtle);
+                border-radius: var(--radius-md);
+              "
+            >
+              <div class="cost-row">
+                <span style="color: #6f472d">Subtotal Pesanan:</span>
+                <span
+                  id="checkoutSubtotal"
+                  style="font-weight: 700; color: #2a1810"
+                  >Rp 0</span
+                >
+              </div>
+              <div class="cost-row">
+                <span style="color: #6f472d">Ongkos Pengiriman:</span>
+                <span
+                  id="checkoutOngkir"
+                  style="font-weight: 700; color: #2a1810"
+                  >Rp 15.000</span
+                >
+              </div>
+              <div class="cost-total">
+                <span>Total Pembayaran:</span>
+                <span id="checkoutTotalAkhir" style="color: #8b5a36">Rp 0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- KOLOM KANAN: Isian Informasi Pemesan & Pembayaran (Sesuai Soal No. 4) -->
+        <div>
+          <div class="order-summary-box">
+            <h2
+              style="
+                font-size: 1.2rem;
+                color: #2a1810;
+                margin-bottom: 1.25rem;
+                padding-bottom: 0.75rem;
+                border-bottom: 1px solid var(--border-light);
+              "
+            >
+              2. Data Pemesan &amp; Pembayaran
+            </h2>
+
+            <form id="formCheckoutPesanan">
+              <!-- Nama Pemesan -->
+              <div class="form-group">
+                <label for="checkoutNama" class="form-label"
+                  >Nama Lengkap Pemesan <span class="required">*</span></label
+                >
+                <input
+                  type="text"
+                  id="checkoutNama"
+                  class="form-control"
+                  placeholder="Masukkan nama lengkap..."
+                  value="Budi Santoso"
+                  required
+                />
+              </div>
+
+              <!-- Nomor Telepon -->
+              <div class="form-group">
+                <label for="checkoutTelepon" class="form-label"
+                  >Nomor WhatsApp / HP <span class="required">*</span></label
+                >
+                <input
+                  type="tel"
+                  id="checkoutTelepon"
+                  class="form-control"
+                  placeholder="0812-xxxx-xxxx"
+                  value="0812-3456-7890"
+                  required
+                />
+              </div>
+
+              <!-- Alamat Lengkap Pengiriman -->
+              <div class="form-group">
+                <label for="checkoutAlamat" class="form-label"
+                  >Alamat Lengkap Pengiriman
+                  <span class="required">*</span></label
+                >
+                <textarea
+                  id="checkoutAlamat"
+                  class="form-control"
+                  rows="3"
+                  placeholder="Nama jalan, nomor rumah, RT/RW, kelurahan, kecamatan, kota..."
+                  required
+                >
+Jl. Melati No. 12, Kel. Menteng Dalam, Tebet, Jakarta Selatan 12870</textarea
+                >
+              </div>
+
+              <!-- Pilihan Jasa Ekspedisi Pengiriman -->
+              <div class="form-group">
+                <label for="checkoutEkspedisi" class="form-label"
+                  >Jasa Ekspedisi Pengiriman
+                  <span class="required">*</span></label
+                >
+                <select id="checkoutEkspedisi" class="form-select" required>
+                  <option value="JNE Express (Reguler)">
+                    JNE Express (Reguler) - Rp 15.000 (2-3 Hari)
+                  </option>
+                  <option value="SiCepat Express (Kilat)">
+                    SiCepat Express (Kilat) - Rp 25.000 (1 Hari)
+                  </option>
+                  <option value="J&T Cargo (Hemat)">
+                    J&amp;T Cargo (Hemat) - Rp 12.000 (3-5 Hari)
+                  </option>
+                  <option value="GoSend Instant Delivery">
+                    GoSend Instant - Rp 25.000 (Hari Ini Sampai)
+                  </option>
+                </select>
+              </div>
+
+              <!-- Pilihan Metode Pembayaran -->
+              <div class="form-group">
+                <label for="checkoutPembayaran" class="form-label"
+                  >Metode Pembayaran <span class="required">*</span></label
+                >
+                <select id="checkoutPembayaran" class="form-select" required>
+                  <option value="Transfer Bank BCA (Virtual Account)">
+                    Transfer Bank BCA (Virtual Account)
+                  </option>
+                  <option value="QRIS Mandiri / Semua Bank">
+                    QRIS Mandiri (Scan QR)
+                  </option>
+                  <option value="e-Wallet GoPay / OVO">
+                    e-Wallet (GoPay / OVO)
+                  </option>
+                  <option value="Cash on Delivery (COD)">
+                    Cash on Delivery (Bayar di Tempat)
+                  </option>
+                </select>
+              </div>
+
+              <!-- Tombol Submit Pemesanan -->
+              <div style="margin-top: 1.75rem">
+                <button type="submit" class="btn btn-primary btn-full btn-lg">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                  >
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span>Konfirmasi &amp; Proses Pesanan</span>
+                </button>
+              </div>
+
+              <p
+                style="
+                  font-size: 0.775rem;
+                  color: #8c7e75;
+                  text-align: center;
+                  margin-top: 0.75rem;
+                "
+              >
+                🔒 Pesanan Anda langsung dicatat dalam sistem dan nomor Delivery
+                Order akan digenerate otomatis.
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ========================================================
+       MODAL BOX: SUKSES PEMESANAN (Menampilkan Nomor DO Baru)
+       ======================================================== -->
+    <div id="modalSuksesPesanan" class="modal-overlay">
+      <div class="modal-content" style="max-width: 520px">
+        <div class="modal-body" id="modalSuksesDetail">
+          <!-- Konten detail diinjeksi via script.js tampilkanModalSuksesPesanan() -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+      <div class="container">
+        <div class="footer-bottom" style="border: none; padding-top: 0">
+          &copy; 2026 PustakaKopi Store &bull; UTS Pemrograman Web 1 &bull;
+          Universitas Pelita Bangsa
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
+  </body>
+</html>

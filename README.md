@@ -56,3 +56,7 @@
     ├── data.js         # Dummy Data Katalog & Database State Lokal
     └── script.js       # Logika Interaktif, DOM Manipulation, & Event Handling
 ```
+## link youtube 
+https://youtu.be/yPbG5oXcKbI
+
+---
